@@ -90,7 +90,9 @@ void draw() {
     text("Press ESC to quit", width/2, height/2 + 300);
     button.hoverAnimation(255, 255, 255);
     fill(255, 0, 0);
-    text("There is no controller hooked up", width/2 + 300, 20);
+    if (controlNoti) {
+      text("There is no controller hooked up", width/2 + 300, 20);
+    }
     break;
 
   case "PAUSE":

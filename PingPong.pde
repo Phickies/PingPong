@@ -44,7 +44,6 @@ int winScore = 5;
 
 boolean autoPlayPlayer1 = false;
 boolean autoPlayPlayer2 = false;
-boolean control         = false;
 boolean delay           = true;
 boolean countdown       = true;
 boolean noControl       = false;
@@ -209,7 +208,7 @@ void draw() {
         ball.collide(player1);
       }
 
-      if (!control) {
+      if (noControl) {
         if (player1.getKeyPressed()) {
           player1.move();
         }
@@ -226,7 +225,7 @@ void draw() {
 }
 
 void mousePressed() {
-  if (!control) {
+  if (noControl) {
     if (button.isPressed()) {
       GAMESTATE = "PLAY";
     }

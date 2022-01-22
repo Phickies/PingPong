@@ -106,6 +106,10 @@ void draw() {
     toggle.display();
     text("Press ESC to quit", width/2, height/2 + 300);
     button2.hoverAnimation(255, 255, 255);
+    fill(255, 0, 0);
+    if (controlNoti) {
+      text("There is no controller hooked up", width/2 + 300, 20);
+    }
     break;
 
   case "PLAY":

@@ -14,4 +14,7 @@ void loop() {
   bY = analogRead(A4);
   Serial.print('B');
   Serial.println(bY);
+  aZ = analogRead(A2);
+  Serial.print('X');
+  Serial.println(aZ);
 }

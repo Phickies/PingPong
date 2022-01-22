@@ -24,11 +24,13 @@ class Score_Table {
     newFont = createFont("Montserrat-Thin.ttf", 200);
     textFont(newFont);
     textSize(200);
+    fill(255);
     if (player.getPosition() == "left") {
       text(score, width/2 - 200, height/2 - 35);
     } else if (player.getPosition() == "right") {
       text(score, width/2 + 200, height/2 - 35);
     }
+    fill(255);
   }
 
   void update() {

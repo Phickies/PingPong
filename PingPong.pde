@@ -30,7 +30,7 @@ import processing.serial.*;
 Serial port;
 
 Button button, button2, button3;
-Toggle toggle;
+Toggle toggle, toggle2, toggle3;
 Field field;
 Player player1, player2;
 Score_Table scoreTable1, scoreTable2;
@@ -40,14 +40,15 @@ String GAMESTATE = "START";
 String buff = "";
 float controlA, controlB, buttonX;
 int a = 0;
-int winScore = 10;
+int winScore = 5;
 
 boolean autoPlayPlayer1 = false;
-boolean autoPlayPlayer2 = true;
+boolean autoPlayPlayer2 = false;
 boolean control         = false;
 boolean controlNoti     = false;
 boolean delay           = true;
 boolean countdown       = true;
+boolean noControl       = false;
 
 void setup() {
   size(1050, 700);
@@ -60,7 +61,9 @@ void setup() {
   button      = new Button(false, width/2, height/2, 100, 50, 90, 0, "START", 50, 255, null);
   button2     = new Button(false, width/2, height/2 - 150, 100, 50, 90, 0, "RESET", 50, 255, null);
   button3     = new Button(false, width/2, height/2, 150, 50, 90, 0, "CONTINUE", 50, 255, null);
-  toggle      = new Toggle(width/2, height/2 + 200, 20, color(0, 255, 0), color(255, 0, 0), 255);
+  toggle      = new Toggle(width/2 - 100, height/2 + 200, 20, color(0, 255, 0), color(255, 0, 0), 255);
+  toggle2     = new Toggle(width/2 + 100, height/2 + 200, 20, color(0, 255, 0), color(255, 0, 0), 255);
+  toggle3     = new Toggle(width/2, height/2 + 200, 20, color(0, 255, 0), color(255, 0, 0), 255);
   field       = new Field(400, 300);
   player1     = new Player("left");
   player2     = new Player("right");
@@ -73,6 +76,7 @@ void setup() {
   }
   catch (Exception e) {
     controlNoti = true;
+    noControl   = true;
   }
 
   player1.setPosition(field);
@@ -81,8 +85,14 @@ void setup() {
 
 void draw() {
 
-  while (port.available() > 0) {
-    serialEvent(port.read());
+  try {
+    while (port.available() > 0) {
+      serialEvent(port.read());
+    }
+  }
+  catch (Exception e) {
+    controlNoti = true;
+    noControl   = true;
   }
 
   switch (GAMESTATE) {
@@ -95,8 +105,10 @@ void draw() {
     button.display();
     textSize(25);
     fill(255);
-    text("Controller MODE", width/2, height/2 + 130);
+    text("Controller MODE", width/2 - 100, height/2 + 130);
+    text("SinglePlayer", width/2 + 100, height/2 + 130);
     toggle.display();
+    toggle2.display();
     text("Press ESC to quit", width/2, height/2 + 300);
     button.hoverAnimation(255, 255, 255);
     fill(255, 0, 0);
@@ -117,7 +129,7 @@ void draw() {
     textSize(25);
     fill(255);
     text("Controller MODE", width/2, height/2 + 130);
-    toggle.display();
+    toggle3.display();
     text("Press ESC to quit", width/2, height/2 + 300);
     button2.hoverAnimation(255, 255, 255);
     button3.hoverAnimation(255, 255, 255);
@@ -138,9 +150,32 @@ void draw() {
     field.display();
     player1.display();
     player2.display();
+    ball.display();
+
+    if (ball.getPosX() > width/2) {
+      if (ball.playerMissed()) {
+        scoreTable1.update();
+        ball.setEndPosition("right");
+        roundReset();
+      }
+    } else {
+      if (ball.playerMissed()) {
+        scoreTable2.update();
+        ball.setEndPosition("left");
+        roundReset();
+      }
+    }
+
+    if (scoreTable1.getScore() == winScore) {
+      scoreTable1.displayWin();
+      noLoop();
+    } else if (scoreTable2.getScore() == winScore) {
+      scoreTable2.displayWin();
+      noLoop();
+    }
+
     scoreTable1.display(player1);
     scoreTable2.display(player2);
-    ball.display();
 
     if (delay) {
       a = millis();
@@ -150,7 +185,9 @@ void draw() {
       textSize(40);
       fill(255);
       int value = (a + 4000 - millis())/1000;
-      text(value, width/2, 20);
+      if (scoreTable1.getScore() != winScore && scoreTable2.getScore() != winScore) {
+        text(value, width/2, 20);
+      }
       if (value == 0) {
         countdown = false;
       }
@@ -186,33 +223,6 @@ void draw() {
         player1.move(controlA);
         player2.move(controlB);
       }
-
-
-      if (scoreTable1.getScore() == winScore) {
-        noLoop();
-        scoreTable1.displayWin();
-      } else if (scoreTable2.getScore() == winScore) {
-        noLoop();
-        scoreTable2.displayWin();
-      }
-
-      if (ball.getPosX() > width/2) {
-        if (ball.playerMissed()) {
-          scoreTable1.update();
-          ball.setEndPosition("right");
-          ball.reset();
-          delay = true;
-          countdown = true;
-        }
-      } else {
-        if (ball.playerMissed()) {
-          scoreTable2.update();
-          ball.setEndPosition("left");
-          ball.reset();
-          delay = true;
-          countdown = true;
-        }
-      }
     }
     break;
   }
@@ -233,13 +243,27 @@ void mousePressed() {
     GAMESTATE = "PLAY";
   }
 
-  if (toggle.switched()) {
-    if (toggle.getSwitchState()) {
-      toggle.setSwitchState(false);
-      control = true;
+  if (!noControl) {
+    if (toggle.switched() || toggle3.switched()) {
+      if (toggle.getSwitchState() && toggle3.getSwitchState()) {
+        toggle.setSwitchState(false);
+        toggle3.setSwitchState(false);
+        control = true;
+      } else {
+        toggle.setSwitchState(true);
+        toggle3.setSwitchState(true);
+        control = false;
+      }
+    }
+  }
+
+  if (toggle2.switched()) {
+    if (toggle2.getSwitchState()) {
+      toggle2.setSwitchState(false);
+      autoPlayPlayer2 = true;
     } else {
-      toggle.setSwitchState(true);
-      control = false;
+      toggle2.setSwitchState(true);
+      autoPlayPlayer2 = false;
     }
   }
 }
@@ -287,4 +311,13 @@ void gameReset() {
   scoreTable2.setScore(0);
   ball.position.set(width/2, height/2);
   ball.accelerate.set(-8, -8);
+}
+
+void roundReset() {
+  player1.setPosY(height/2);
+  player2.setPosY(height/2);
+  ball.position.set(width/2, height/2);
+  ball.reset();
+  delay = true;
+  countdown = true;
 }

@@ -220,13 +220,14 @@ void mousePressed() {
     if (button.isPressed()) {
       GAMESTATE = "PLAY";
     }
-    if (button3.isPressed()) {
-      GAMESTATE = "PLAY";
-    }
     if (button2.isPressed()) {
       gameReset();
       GAMESTATE = "PLAY";
     }
+  }
+  
+   if (button3.isPressed()) {
+     GAMESTATE = "PLAY";
   }
 
   if (toggle.switched()) {

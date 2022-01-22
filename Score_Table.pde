@@ -15,8 +15,8 @@ class Score_Table {
   int getScore() {
     return score;
   }
-  
-  String getSide(){
+
+  String getSide() {
     return side;
   }
 
@@ -34,8 +34,9 @@ class Score_Table {
   void update() {
     score++;
   }
-  
-  void displayWin(){
+
+  // display only when you win
+  void displayWin() {
     fill(255, 255, 0);
     textSize(100);
     if (side == "left") {

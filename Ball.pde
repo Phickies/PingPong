@@ -63,6 +63,7 @@ class Ball {
     }
   }
 
+  // check if whether the ball is missed the player
   boolean playerMissed() {
     boolean missed = false;
     if (position.x + 10 >= width /2 + field.getFWidth()  || position.x - 10 <= width/2  - field.getFWidth()) {

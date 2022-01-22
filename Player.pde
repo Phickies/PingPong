@@ -52,7 +52,7 @@ class Player {
   }
 
   void move() {
-    if (position == "left"){
+    if (position == "left") {
       switch (key) {
       case 'w':
         posY -= 13;
@@ -61,8 +61,8 @@ class Player {
         posY += 13;
         break;
       }
-    } 
-    if (position == "right"){
+    }
+    if (position == "right") {
       switch (key) {
       case 'o':
         posY -= 13;
@@ -72,5 +72,9 @@ class Player {
         break;
       }
     }
+  }
+
+  void move(float value) {
+    posY += value;
   }
 }

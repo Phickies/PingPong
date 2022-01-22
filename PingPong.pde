@@ -45,7 +45,6 @@ int winScore = 5;
 boolean autoPlayPlayer1 = false;
 boolean autoPlayPlayer2 = false;
 boolean control         = false;
-boolean controlNoti     = false;
 boolean delay           = true;
 boolean countdown       = true;
 boolean noControl       = false;
@@ -75,7 +74,6 @@ void setup() {
     port      = new Serial(this, Serial.list()[0], 9600);
   }
   catch (Exception e) {
-    controlNoti = true;
     noControl   = true;
   }
 
@@ -91,7 +89,6 @@ void draw() {
     }
   }
   catch (Exception e) {
-    controlNoti = true;
     noControl   = true;
   }
 
@@ -112,7 +109,7 @@ void draw() {
     text("Press ESC to quit", width/2, height/2 + 300);
     button.hoverAnimation(255, 255, 255);
     fill(255, 0, 0);
-    if (controlNoti) {
+    if (noControl) {
       text("There is no controller hooked up", width/2 + 300, 20);
     }
     if (buttonX == 0.000 && control) {
@@ -134,7 +131,7 @@ void draw() {
     button2.hoverAnimation(255, 255, 255);
     button3.hoverAnimation(255, 255, 255);
     fill(255, 0, 0);
-    if (controlNoti) {
+    if (noControl) {
       text("There is no controller hooked up", width/2 + 300, 20);
     }
     if (buttonX == 0.000 && control) {

@@ -66,7 +66,7 @@ void setup() {
   try {
     port      = new Serial(this, Serial.list()[0], 9600);
   }
-  catch (Exception e) {
+  catch (NullPointerException e) {
     controlNoti = true;
   }
 

@@ -11,11 +11,11 @@
  Player 1 control on the left side and player 2 is on the opposite side.
  Earn 5 point first to win the game,
  
- You can turn on the autoPlayerPlayer1 or 2 to play againist computer and algorithm.
+ You can turn on the autoPlayerPlayer1 or 2 to play againist computer.
  
  In order to make "controller MODE" work, you need to hook up with the arduino broad,
- upload the sketch on the "PingPongController.ino" file into the arduino broad.
- Plug on a small joystick and you can now enjoy the game your friends.
+ upload the sketch on the "PingPongController.ino" file into your arduino broad.
+ attach a small joystick into the arduino broad and you can now enjoy the game with your friends.
  This game using the "GraphicUserInterface" source code from Phicks to create GUI.
  
  [WARNING]

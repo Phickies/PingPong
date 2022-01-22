@@ -214,7 +214,6 @@ void serialEvent(int serial) {
     if (serial != 10) {
       buff += char(serial);
     } else {
-      println(char(serial));
       char c = buff.charAt(0);
       buff = buff.substring(1);
       buff = buff.substring(0, buff.length() - 1);
@@ -227,6 +226,5 @@ void serialEvent(int serial) {
     }
   }
   catch (Exception error) {
-    println("no valid data");
   }
 }

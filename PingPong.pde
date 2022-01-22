@@ -39,11 +39,14 @@ Ball ball;
 String GAMESTATE = "START";
 String buff = "";
 float controlA, controlB;
+int a = 0;
 
 boolean autoPlayPlayer1 = false;
-boolean autoPlayPlayer2 = true;
+boolean autoPlayPlayer2 = false;
 boolean control         = false;
 boolean controlNoti     = false;
+boolean delay           = true;
+boolean countdown       = true;
 
 void setup() {
   size(1050, 700);
@@ -121,116 +124,132 @@ void draw() {
     scoreTable1.display(player1);
     scoreTable2.display(player2);
     ball.display();
-
-    if (autoPlayPlayer1) {
-      player1.setPosY(ball.getPosY());
+    
+    if (delay){
+      a = millis();
+      delay = false;
     }
-    if (autoPlayPlayer2) {
-      player2.setPosY(ball.getPosY());
-    }
-
-    player1.update(field);
-    player2.update(field);
-
-    if ( ball.getPosX() > width/2 ) {
-      ball.setIsLeft(false);
-      ball.collide(player2);
-    } else {
-      ball.setIsLeft(true);
-      ball.collide(player1);
-    }
-
-    if (!control) {
-      if (player1.getKeyPressed()) {
-        player1.move();
-      }
-      if (player2.getKeyPressed()) {
-        player2.move();
-      }
-    } else {
-      while (port.available() > 0) {
-        serialEvent(port.read());
-      }
-      player1.move(controlA);
-      player2.move(controlB);
-    }
-
-
-    if (scoreTable1.getScore() == 5) {
-      noLoop();
-      scoreTable1.displayWin();
-    } else if (scoreTable2.getScore() == 5) {
-      noLoop();
-      scoreTable2.displayWin();
-    }
-
-    if (ball.getPosX() > width/2) {
-      if (ball.playerMissed()) {
-        scoreTable1.update();
-        ball.setEndPosition("right");
-        ball.reset();
-      }
-    } else {
-      if (ball.playerMissed()) {
-        scoreTable2.update();
-        ball.setEndPosition("left");
-        ball.reset();
+    if (countdown){
+      textSize(40);
+      fill(255);
+      int value = (a + 4000 - millis())/1000;
+      text(value, width/2, 20);
+      if (value == 0){
+        countdown = false;
       }
     }
-    break;
-  }
-}
+    
+    if (millis() > a + 3000) {
+      if (autoPlayPlayer1) {
+        player1.setPosY(ball.getPosY());
+      }
+      if (autoPlayPlayer2) {
+        player2.setPosY(ball.getPosY());
+      }
 
-void mousePressed() {
-  if (button.isPressed()) {
-    GAMESTATE = "PLAY";
-  }
+      player1.update(field);
+      player2.update(field);
 
-  if (button2.isPressed()) {
-    GAMESTATE = "PLAY";
-  }
+      if ( ball.getPosX() > width/2 ) {
+        ball.setIsLeft(false);
+        ball.collide(player2);
+      } else {
+        ball.setIsLeft(true);
+        ball.collide(player1);
+      }
 
-  if (toggle.switched()) {
-    if (toggle.getSwitchState()) {
-      toggle.setSwitchState(false);
-      control = true;
-    } else {
-      toggle.setSwitchState(true);
-      control = false;
+      if (!control) {
+        if (player1.getKeyPressed()) {
+          player1.move();
+        }
+        if (player2.getKeyPressed()) {
+          player2.move();
+        }
+      } else {
+        while (port.available() > 0) {
+          serialEvent(port.read());
+        }
+        player1.move(controlA);
+        player2.move(controlB);
+      }
+
+
+      if (scoreTable1.getScore() == 5) {
+        noLoop();
+        scoreTable1.displayWin();
+      } else if (scoreTable2.getScore() == 5) {
+        noLoop();
+        scoreTable2.displayWin();
+      }
+
+      if (ball.getPosX() > width/2) {
+        if (ball.playerMissed()) {
+          scoreTable1.update();
+          ball.setEndPosition("right");
+          ball.reset();
+        }
+      } else {
+        if (ball.playerMissed()) {
+          scoreTable2.update();
+          ball.setEndPosition("left");
+          ball.reset();
+        }
+      }
+      break;
     }
   }
 }
 
-void keyPressed() {
-  player1.setKeyPressed(true);
-  player2.setKeyPressed(true);
+  void mousePressed() {
+    if (button.isPressed()) {
+      GAMESTATE = "PLAY";
+    }
 
-  if (key == TAB) {
-    GAMESTATE = "PAUSE";
-  }
-}
+    if (button2.isPressed()) {
+      GAMESTATE = "PLAY";
+    }
 
-void keyReleased() {
-  player1.setKeyPressed(false);
-  player2.setKeyPressed(false);
-}
-
-void serialEvent(int serial) {
-  try {
-    if (serial != 10) {
-      buff += char(serial);
-    } else {
-      char c = buff.charAt(0);
-      buff = buff.substring(1);
-      buff = buff.substring(0, buff.length() - 1);
-      if (c == 'A') {
-        controlA = map(parseInt(buff), 0, 1023, 13, -13);
-      } else if (c == 'B') {
-        controlB = map(parseInt(buff), 0, 1023, 13, -13);
+    if (toggle.switched()) {
+      if (toggle.getSwitchState()) {
+        toggle.setSwitchState(false);
+        control = true;
+      } else {
+        toggle.setSwitchState(true);
+        control = false;
       }
-      buff = "";
     }
   }
-  catch (Exception error) {
+
+  void keyPressed() {
+    player1.setKeyPressed(true);
+    player2.setKeyPressed(true);
+
+    if (key == TAB) {
+      GAMESTATE = "PAUSE";
+    }
   }
-}
+
+  void keyReleased() {
+    player1.setKeyPressed(false);
+    player2.setKeyPressed(false);
+  }
+
+  void serialEvent(int serial) {
+    try {
+      if (serial != 10) {
+        buff += char(serial);
+      } else {
+        char c = buff.charAt(0);
+        buff = buff.substring(1);
+        buff = buff.substring(0, buff.length() - 1);
+        if (c == 'A') {
+          controlA = map(parseInt(buff), 0, 1023, 13, -13);
+        } else if (c == 'B') {
+          controlB = map(parseInt(buff), 0, 1023, 13, -13);
+        }
+        buff = "";
+      }
+    }
+    catch (Exception error) {
+    }
+  }

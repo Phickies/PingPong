@@ -43,6 +43,7 @@ float controlA, controlB;
 boolean autoPlayPlayer1 = false;
 boolean autoPlayPlayer2 = true;
 boolean control         = false;
+boolean controlNoti     = false;
 
 void setup() {
   size(1050, 700);
@@ -62,7 +63,12 @@ void setup() {
   scoreTable2 = new Score_Table("right");
   ball        = new Ball();
 
-  port        = new Serial(this, Serial.list()[0], 9600);
+  try {
+    port      = new Serial(this, Serial.list()[0], 9600);
+  }
+  catch (Exception e) {
+    controlNoti = true;
+  }
 
   player1.setPosition(field);
   player2.setPosition(field);
@@ -83,6 +89,8 @@ void draw() {
     toggle.display();
     text("Press ESC to quit", width/2, height/2 + 300);
     button.hoverAnimation(255, 255, 255);
+    fill(255, 0, 0);
+    text("There is no controller hooked up", width/2 + 300, 20);
     break;
 
   case "PAUSE":

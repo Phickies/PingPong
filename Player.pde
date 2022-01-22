@@ -39,15 +39,15 @@ class Player {
 
   void display() {
     fill(255);
-    rect(posX, posY, 5, 40, 90);
+    rect(posX, posY, 5, 50, 90);
     fill(255);
   }
 
   void update(Field field) {
-    if (posY + 50 >= height/2 + field.getFHeight()) {
-      posY = height/2 + field.getFHeight() - 50;
-    } else if (posY - 50 <= height/2 - field.getFHeight()) {
-      posY = height/2 - field.getFHeight() + 50;
+    if (posY + 60 >= height/2 + field.getFHeight()) {
+      posY = height/2 + field.getFHeight() - 60;
+    } else if (posY - 60 <= height/2 - field.getFHeight()) {
+      posY = height/2 - field.getFHeight() + 60;
     }
   }
 

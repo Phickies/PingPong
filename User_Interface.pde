@@ -109,7 +109,7 @@ class User_Interface {
         fill(textColor);
         textFont(font);
         textSize(textSize);
-        text (content, posX, posY);
+        text (content, posX, posY - 5);
         fill(textColor);
       }
     } else {
@@ -122,7 +122,7 @@ class User_Interface {
         fill(textColor);
         textFont(font);
         textSize(textSize);
-        text (content, posX, posY);
+        text (content, posX, posY - 5 );
         fill(textColor);
       }
     }

@@ -40,15 +40,15 @@ class Ball {
     position.add(accelerate);
 
     if (isLeft == true) {
-      if ((position.x - 12 < player.posX + 6 ) && (position.y < player.posY + 40) && (position.y > player.posY - 40)) {
+      if ((position.x - 15 < player.posX + 5 ) && (position.y < player.posY + 50) && (position.y > player.posY - 50)) {
         accelerate.x *= -1;
       }
     } else {
-      if ((position.x + 12 > player.posX - 6 ) && (position.y < player.posY + 40) && (position.y > player.posY - 40)) {
+      if ((position.x + 15 > player.posX - 5 ) && (position.y < player.posY + 50) && (position.y > player.posY - 50)) {
         accelerate.x *= -1;
       }
     }
-    if (position.y + 10 >= height/2 + field.getFHeight() || position.y - 10 <= height/2 - field.getFHeight()) {
+    if (position.y + 19 >= height/2 + field.getFHeight() || position.y - 19 <= height/2 - field.getFHeight()) {
       accelerate.y *= -1;
       accelerate.x += int(random(-1, 3));
     }

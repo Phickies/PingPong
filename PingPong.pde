@@ -38,9 +38,8 @@ Ball ball;
 
 String GAMESTATE = "START";
 String buff = "";
-float controlA, controlB;
+float controlA, controlB, buttonX;
 int a = 0;
-int buttonX;
 int winScore = 10;
 
 boolean autoPlayPlayer1 = false;
@@ -81,6 +80,11 @@ void setup() {
 }
 
 void draw() {
+
+  while (port.available() > 0) {
+    serialEvent(port.read());
+  }
+
   switch (GAMESTATE) {
   case "START":
     background(0);
@@ -98,6 +102,9 @@ void draw() {
     fill(255, 0, 0);
     if (controlNoti) {
       text("There is no controller hooked up", width/2 + 300, 20);
+    }
+    if (buttonX == 0.000 && control) {
+      GAMESTATE = "PLAY";
     }
     break;
 
@@ -117,6 +124,9 @@ void draw() {
     fill(255, 0, 0);
     if (controlNoti) {
       text("There is no controller hooked up", width/2 + 300, 20);
+    }
+    if (buttonX == 0.000 && control) {
+      GAMESTATE = "PLAY";
     }
     delay = true;
     countdown = true;
@@ -173,9 +183,6 @@ void draw() {
           player2.move();
         }
       } else {
-        while (port.available() > 0) {
-          serialEvent(port.read());
-        }
         player1.move(controlA);
         player2.move(controlB);
       }
@@ -206,12 +213,8 @@ void draw() {
           countdown = true;
         }
       }
-      break;
     }
-  }
-
-  if (buttonX > 1 && control) {
-    GAMESTATE = "PLAY";
+    break;
   }
 }
 
@@ -220,14 +223,14 @@ void mousePressed() {
     if (button.isPressed()) {
       GAMESTATE = "PLAY";
     }
-    if (button2.isPressed()) {
-      gameReset();
+    if (button3.isPressed()) {
       GAMESTATE = "PLAY";
     }
   }
-  
-   if (button3.isPressed()) {
-     GAMESTATE = "PLAY";
+
+  if (button2.isPressed()) {
+    gameReset();
+    GAMESTATE = "PLAY";
   }
 
   if (toggle.switched()) {
@@ -268,7 +271,7 @@ void serialEvent(int serial) {
       } else if (c == 'B') {
         controlB = map(parseInt(buff), 0, 1023, 13, -13);
       } else if (c == 'X') {
-        buttonX  = parseInt(map(parseInt(buff), 0, 1023, 0, 2));
+        buttonX  = map(parseInt(buff), 0, 1023, parseInt(false), parseInt(true));
       }
       buff = "";
     }

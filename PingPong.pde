@@ -1,26 +1,26 @@
 /*
   ------PING CHILLING-------
  
- created by @Phicks
+ created by Quy An Tran
  <22-01-2022>
  -----------------------------------------------------------------------------------------------------
  
  This is a Ping Pong simulated game.
  using 'W' and 'S' to control player1,
  using 'O' and 'L' to control player2,
- Player 1 control on the left side and player 2 is on the opposite side.
+ Player 1 controls on the left side and player 2 is on the opposite side.
  Earn 5 point first to win the game,
  
- You can turn on the autoPlayerPlayer1 or 2 to play againist computer and algorithm.
+ You can turn on the autoPlayerPlayer1 or 2 to play against computers and algorithms.
  
- In order to make "controller MODE" work, you need to hook up with the arduino broad,
- upload the sketch on the "PingPongController.ino" file into the arduino broad.
- Plug on a small joystick and you can now enjoy the game your friends.
- This game using the "GraphicUserInterface" source code from Phicks to create GUI.
+ In order to make "controller MODE" work, you need to hook up with the arduino board,
+ upload the sketch on the "PingPongController.ino" file into the arduino board.
+ Plug on a small joystick and you can now enjoy the game with your friends.
+ This game uses the "GraphicUserInterface" source code from Quy An Tran to create GUI.
  
  [WARNING]
  - The sensitive MODE is under construction.
- - It is prefer to hook up with the controller since the keybroad input is suck as fuck.
+ - It is preferred to hook up with the controller since the keyboard input is suck af.
  - You can improve, copy, remix yourself a better version, use it for your own purpose.
  ------------------------------------------------------------------------------------------------------
  */

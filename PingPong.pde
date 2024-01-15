@@ -46,6 +46,7 @@ boolean autoPlayPlayer1 = false;
 boolean autoPlayPlayer2 = false;
 boolean delay           = true;
 boolean countdown       = true;
+boolean control         = false;
 boolean noControl       = false;
 
 void setup() {
